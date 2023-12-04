@@ -2,6 +2,7 @@ package ir.millennium.sampleprojectcompose.presentation.screens.mainScreen
 
 import android.app.Activity
 import android.content.Context
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -17,6 +18,8 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -24,10 +27,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -42,18 +47,33 @@ import ir.millennium.sampleprojectcompose.domain.entity.TypeTheme
 import ir.millennium.sampleprojectcompose.presentation.activity.mainActivity.MainActivityViewModel
 import ir.millennium.sampleprojectcompose.presentation.dialog.questionDialog
 import ir.millennium.sampleprojectcompose.presentation.screens.articleScreen.ArticleScreen
+import ir.millennium.sampleprojectcompose.presentation.screens.articleScreen.ArticleScreenViewModel
 import ir.millennium.sampleprojectcompose.presentation.screens.homeScreen.HomeScreen
+import ir.millennium.sampleprojectcompose.presentation.screens.homeScreen.HomeScreenViewModel
 import ir.millennium.sampleprojectcompose.presentation.theme.LocalCustomColorsPalette
 import ir.millennium.sampleprojectcompose.presentation.theme.Red
+import ir.millennium.sampleprojectcompose.presentation.theme.White
+import ir.millennium.sampleprojectcompose.presentation.utils.Constants.BACK_PRESSED
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navController: NavController, mainActivityViewModel: MainActivityViewModel) {
+fun MainScreen(
+    navController: NavController,
+    mainActivityViewModel: MainActivityViewModel,
+    articleScreenViewModel: ArticleScreenViewModel,
+    homeScreenViewModel: HomeScreenViewModel
+) {
 
     val context = LocalContext.current
 
-    val statusChangeLanguageDialog = remember { mutableStateOf(false) }
-    val callbackOnYesButtonQuestionDialog = remember { mutableStateOf(false) }
+    val isShowChangeLanguageDialog = rememberSaveable { mutableStateOf(false) }
+
+    val coroutineScope = rememberCoroutineScope()
+
+    val snackbarHostState = remember { SnackbarHostState() }
 
     val items = listOf(
         NavItemState(
@@ -68,7 +88,7 @@ fun MainScreen(navController: NavController, mainActivityViewModel: MainActivity
         )
     )
 
-    var bottomNavState by remember {
+    var bottomNavState by rememberSaveable {
         mutableIntStateOf(0)
     }
 
@@ -111,14 +131,17 @@ fun MainScreen(navController: NavController, mainActivityViewModel: MainActivity
     ) { contentPadding ->
         Box(
             Modifier
-                .background(Color.White)
+                .background(White)
                 .padding(contentPadding)
                 .fillMaxSize()
         ) {
             if (bottomNavState == 0) {
-                HomeScreen(navController = navController)
+                HomeScreen(homeScreenViewModel)
             } else {
-                ArticleScreen(navController = navController)
+                ArticleScreen(
+                    navController = navController,
+                    articleScreenViewModel = articleScreenViewModel
+                )
             }
 
             CenterAlignedTopAppBar(
@@ -132,7 +155,7 @@ fun MainScreen(navController: NavController, mainActivityViewModel: MainActivity
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { statusChangeLanguageDialog.value = true }) {
+                    IconButton(onClick = { isShowChangeLanguageDialog.value = true }) {
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.ic_language),
                             contentDescription = "Change Language Icon",
@@ -147,6 +170,7 @@ fun MainScreen(navController: NavController, mainActivityViewModel: MainActivity
                         } else {
                             mainActivityViewModel.onThemeChanged(TypeTheme.DARK.typeTheme)
                         }
+                        (context as? Activity)?.recreate()
                     }) {
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.ic_change_theme),
@@ -159,19 +183,41 @@ fun MainScreen(navController: NavController, mainActivityViewModel: MainActivity
                     containerColor = LocalCustomColorsPalette.current.toolbarColor
                 )
             )
-            if (statusChangeLanguageDialog.value) {
+
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
+
+            if (isShowChangeLanguageDialog.value) {
                 questionDialog(
                     message = stringResource(id = R.string.message_change_language),
-                    statusDialog = statusChangeLanguageDialog,
-                    callbackOnYesButtonQuestionDialog = callbackOnYesButtonQuestionDialog
+                    statusDialog = isShowChangeLanguageDialog,
+                    onClickYes = {
+                        coroutineScope.launch {
+                            delay(50)
+                            changeLanguage(mainActivityViewModel, context)
+                        }
+                    }
                 )
-            }
-
-            if (callbackOnYesButtonQuestionDialog.value) {
-                changeLanguage(mainActivityViewModel, context)
             }
         }
     }
+
+    BackHandler { whenUserWantToExitApp(context, coroutineScope, snackbarHostState) }
+}
+
+fun whenUserWantToExitApp(
+    context: Context,
+    coroutineScope: CoroutineScope,
+    snackbarHostState: SnackbarHostState
+) {
+    if (BACK_PRESSED + 2000 > System.currentTimeMillis()) {
+        (context as? Activity)?.finish()
+    } else {
+        coroutineScope.launch { snackbarHostState.showSnackbar(context.getString(R.string.message_when_user_exit_application)) }
+    }
+    BACK_PRESSED = System.currentTimeMillis()
 }
 
 fun changeLanguage(mainActivityViewModel: MainActivityViewModel, context: Context) {

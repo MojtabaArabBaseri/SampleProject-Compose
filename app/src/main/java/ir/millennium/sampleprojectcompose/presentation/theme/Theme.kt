@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import ir.millennium.sampleprojectcompose.domain.entity.TypeLanguage
 import ir.millennium.sampleprojectcompose.domain.entity.TypeTheme
 
 private val DarkColorPalette = darkColorScheme(
@@ -37,7 +38,7 @@ private val LightColorPalette = lightColorScheme(
 @Composable
 fun AppTheme(
     typeTheme: Int = TypeTheme.LIGHT.typeTheme,
-    languageApp: String = "en",
+    languageApp: String = TypeLanguage.ENGLISH.typeLanguage,
     authScreens: Boolean = true,
     content: @Composable () -> Unit
 ) {
@@ -47,7 +48,7 @@ fun AppTheme(
         LightColorPalette
     }
 
-    val typography = if (languageApp == "en") {
+    val typography = if (languageApp == TypeLanguage.ENGLISH.typeLanguage) {
         TypographyEnglish
     } else {
         TypographyPersian
