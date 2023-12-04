@@ -1,7 +1,6 @@
 package ir.millennium.sampleprojectcompose.core.utils
 
 import android.content.Context
-import android.graphics.Typeface
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Build.VERSION_CODES
@@ -11,26 +10,6 @@ import javax.inject.Singleton
 
 @Singleton
 open class AuxiliaryFunctionsManager @Inject constructor() {
-
-    fun getTypefaceNameApp(context: Context?): Typeface {
-        return Typeface.createFromAsset(context!!.assets, "fonts/IranSans_Bold.ttf")
-    }
-
-    fun getTypefaceIranSansBoldPersian(context: Context?): Typeface {
-        return Typeface.createFromAsset(context!!.assets, "fonts/IranSans_Bold.ttf")
-    }
-
-    fun getTypefaceIranSansBoldEnglish(context: Context?): Typeface {
-        return Typeface.createFromAsset(context!!.assets, "fonts/Iran_Sans_English_Number.ttf")
-    }
-
-    fun getTypefaceIranSansPersian(context: Context?): Typeface {
-        return Typeface.createFromAsset(context!!.assets, "fonts/Iran_Sans.ttf")
-    }
-
-    fun getTypefaceIranSansEnglish(context: Context?): Typeface {
-        return Typeface.createFromAsset(context!!.assets, "fonts/Iran_Sans_English_Number.ttf")
-    }
 
     fun getMonth(position: Int): String {
         return when (position) {

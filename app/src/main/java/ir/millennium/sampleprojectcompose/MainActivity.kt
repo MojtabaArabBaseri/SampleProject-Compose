@@ -54,8 +54,10 @@ class MainActivity : BaseActivity() {
                 NavGraph(navController, mainActivityViewModel)
             }
         }
+
     }
 }
+
 
 @Composable
 fun MyApp(

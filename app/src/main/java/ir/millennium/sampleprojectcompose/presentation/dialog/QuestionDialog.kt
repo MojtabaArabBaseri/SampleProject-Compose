@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import ir.millennium.sampleprojectcompose.R
+import ir.millennium.sampleprojectcompose.presentation.theme.Green
 import ir.millennium.sampleprojectcompose.presentation.theme.LocalCustomColorsPalette
 import ir.millennium.sampleprojectcompose.presentation.theme.White
 
@@ -103,7 +105,8 @@ fun questionDialog(
                     }
                     .padding(top = 74.dp, end = 16.dp, bottom = 24.dp)
                     .defaultMinSize(minWidth = 90.dp),
-                    shape = RoundedCornerShape(dimensionResource(id = R.dimen.size_radius_button))
+                    shape = RoundedCornerShape(dimensionResource(id = R.dimen.size_radius_button)),
+                    colors = ButtonDefaults.buttonColors(containerColor = Green)
                 ) {
                     Text(
                         text = labelYesButton,

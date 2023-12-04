@@ -2,6 +2,7 @@ package ir.millennium.sampleprojectcompose.presentation.screens.mainScreen
 
 import android.app.Activity
 import android.content.Context
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -17,6 +18,8 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -24,7 +27,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -45,6 +50,9 @@ import ir.millennium.sampleprojectcompose.presentation.screens.articleScreen.Art
 import ir.millennium.sampleprojectcompose.presentation.screens.homeScreen.HomeScreen
 import ir.millennium.sampleprojectcompose.presentation.theme.LocalCustomColorsPalette
 import ir.millennium.sampleprojectcompose.presentation.theme.Red
+import ir.millennium.sampleprojectcompose.presentation.utils.Constants.BACK_PRESSED
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -71,6 +79,10 @@ fun MainScreen(navController: NavController, mainActivityViewModel: MainActivity
     var bottomNavState by remember {
         mutableIntStateOf(0)
     }
+
+    val coroutineScope = rememberCoroutineScope()
+
+    val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
         bottomBar = {
@@ -147,6 +159,7 @@ fun MainScreen(navController: NavController, mainActivityViewModel: MainActivity
                         } else {
                             mainActivityViewModel.onThemeChanged(TypeTheme.DARK.typeTheme)
                         }
+                        (context as? Activity)?.recreate()
                     }) {
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.ic_change_theme),
@@ -159,6 +172,12 @@ fun MainScreen(navController: NavController, mainActivityViewModel: MainActivity
                     containerColor = LocalCustomColorsPalette.current.toolbarColor
                 )
             )
+
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
+
             if (statusChangeLanguageDialog.value) {
                 questionDialog(
                     message = stringResource(id = R.string.message_change_language),
@@ -172,6 +191,21 @@ fun MainScreen(navController: NavController, mainActivityViewModel: MainActivity
             }
         }
     }
+
+    BackHandler { whenUserWantToExitApp(context, coroutineScope, snackbarHostState) }
+}
+
+fun whenUserWantToExitApp(
+    context: Context,
+    coroutineScope: CoroutineScope,
+    snackbarHostState: SnackbarHostState
+) {
+    if (BACK_PRESSED + 2000 > System.currentTimeMillis()) {
+        (context as? Activity)?.finish()
+    } else {
+        coroutineScope.launch { snackbarHostState.showSnackbar(context.getString(R.string.message_when_user_exit_application)) }
+    }
+    BACK_PRESSED = System.currentTimeMillis()
 }
 
 fun changeLanguage(mainActivityViewModel: MainActivityViewModel, context: Context) {

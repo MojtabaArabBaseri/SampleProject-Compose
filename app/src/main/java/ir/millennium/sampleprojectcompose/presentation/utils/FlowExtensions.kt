@@ -1,4 +1,4 @@
-package ir.millennium.sampleprojectcompose.presentation
+package ir.millennium.sampleprojectcompose.presentation.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State

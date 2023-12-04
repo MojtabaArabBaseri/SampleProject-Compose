@@ -64,6 +64,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -73,11 +74,11 @@ import ir.millennium.sampleprojectcompose.data.dataSource.local.sharedPreference
 import ir.millennium.sampleprojectcompose.domain.entity.TypeTheme
 import ir.millennium.sampleprojectcompose.presentation.navigation.Screens
 import ir.millennium.sampleprojectcompose.presentation.theme.GrayDark
-import ir.millennium.sampleprojectcompose.presentation.theme.GrayLight
 import ir.millennium.sampleprojectcompose.presentation.theme.GrayMedium
 import ir.millennium.sampleprojectcompose.presentation.theme.Green
 import ir.millennium.sampleprojectcompose.presentation.theme.LocalCustomColorsPalette
 import ir.millennium.sampleprojectcompose.presentation.theme.NavyColor
+import ir.millennium.sampleprojectcompose.presentation.theme.White
 import ir.millennium.sampleprojectcompose.presentation.utils.Constants
 import ir.millennium.sampleprojectcompose.presentation.utils.Constants.PASSWORD
 import ir.millennium.sampleprojectcompose.presentation.utils.Constants.USER_NAME
@@ -198,32 +199,35 @@ fun LoginUi(navController: NavController, loginScreenViewModel: LoginScreenViewM
                         )
                     }
                 },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentSize()
-                    .background(Transparent)
-                    .padding(start = 65.dp, end = 65.dp)
-                    .focusRequester(focusRequester),
+
                 label = {
                     Text(
                         text = stringResource(id = R.string.user_name),
-                        fontSize = 14.sp,
-                        modifier = Modifier.background(Transparent)
+                        modifier = Modifier.background(Transparent),
+                        style = MaterialTheme.typography.bodyMedium
                     )
                 },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Transparent)
+                    .padding(start = 55.dp, end = 55.dp)
+                    .focusRequester(focusRequester),
+                textStyle = MaterialTheme.typography.bodyMedium,
                 placeholder = {
                     Text(
                         text = USER_NAME,
-                        fontSize = 14.sp,
+                        modifier = Modifier.background(Transparent),
                         color = GrayDark,
-                        modifier = Modifier.background(Transparent)
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodyMedium
+
                     )
                 },
                 leadingIcon = {
                     Icon(
                         imageVector = (ImageVector.vectorResource(id = R.drawable.ic_mobile)),
                         contentDescription = "Email Icon",
-                        tint = LocalCustomColorsPalette.current.textColorPrimary
+                        tint = LocalCustomColorsPalette.current.iconColorPrimary
                     )
                 },
 //                trailingIcon = {
@@ -255,8 +259,8 @@ fun LoginUi(navController: NavController, loginScreenViewModel: LoginScreenViewM
                     unfocusedTextColor = GrayDark,
                     focusedPlaceholderColor = LocalCustomColorsPalette.current.textColorPrimary,
                     unfocusedPlaceholderColor = GrayDark,
-                    focusedContainerColor = GrayLight,
-                    unfocusedContainerColor = GrayLight,
+                    focusedContainerColor = MaterialTheme.colorScheme.background,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.background,
                     focusedLabelColor = Green,
                     unfocusedLabelColor = GrayDark,
                     unfocusedBorderColor = GrayDark,
@@ -269,7 +273,9 @@ fun LoginUi(navController: NavController, loginScreenViewModel: LoginScreenViewM
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedTextField(
-                value = passwordValue, onValueChange = { newText ->
+                value = passwordValue,
+
+                onValueChange = { newText ->
                     passwordValue = newText
                     validatePassword(passwordValue)
                 },
@@ -278,12 +284,12 @@ fun LoginUi(navController: NavController, loginScreenViewModel: LoginScreenViewM
                     .fillMaxWidth()
                     .wrapContentSize()
                     .background(Transparent)
-                    .padding(start = 65.dp, end = 65.dp),
+                    .padding(start = 55.dp, end = 55.dp),
 
                 label = {
                     Text(
                         text = stringResource(id = R.string.please_enter_password),
-                        fontSize = 14.sp,
+                        style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.background(Transparent)
                     )
                 },
@@ -293,14 +299,14 @@ fun LoginUi(navController: NavController, loginScreenViewModel: LoginScreenViewM
                         Text(
                             modifier = Modifier.fillMaxWidth(),
                             text = stringResource(id = R.string.password_incorrect),
-                            color = MaterialTheme.colorScheme.error
+                            color = MaterialTheme.colorScheme.error,
                         )
                     }
                 },
                 placeholder = {
                     Text(
                         text = PASSWORD,
-                        fontSize = 14.sp,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = GrayMedium
                     )
                 },
@@ -332,8 +338,8 @@ fun LoginUi(navController: NavController, loginScreenViewModel: LoginScreenViewM
                     unfocusedTextColor = GrayDark,
                     focusedPlaceholderColor = LocalCustomColorsPalette.current.textColorPrimary,
                     unfocusedPlaceholderColor = GrayDark,
-                    focusedContainerColor = GrayLight,
-                    unfocusedContainerColor = GrayLight,
+                    focusedContainerColor = MaterialTheme.colorScheme.background,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.background,
                     focusedLabelColor = Green,
                     unfocusedLabelColor = GrayDark,
                     unfocusedBorderColor = GrayDark,
@@ -349,7 +355,7 @@ fun LoginUi(navController: NavController, loginScreenViewModel: LoginScreenViewM
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(dimensionResource(id = R.dimen.size_height_button))
-                    .padding(start = 65.dp, end = 65.dp)
+                    .padding(start = 55.dp, end = 55.dp)
                     .shadow(elevation = 8.dp, shape = RoundedCornerShape(28.dp))
                     .clickable(enabled = statusEnabledCardLogin) {
                         if (checkFieldForValidation(
@@ -370,6 +376,9 @@ fun LoginUi(navController: NavController, loginScreenViewModel: LoginScreenViewM
                                 keyboardController?.hide()
                                 focusManager.clearFocus()
                                 statusEnabledCardLogin = false
+                                loginScreenViewModel.sharedPreferencesManager.setStatusLoginUser(
+                                    true
+                                )
                                 visibilityLabelLogin = !visibilityLabelLogin
                                 visibilityProgressBar = !visibilityProgressBar
                                 coroutineScope.launch {
@@ -422,6 +431,17 @@ fun LoginUi(navController: NavController, loginScreenViewModel: LoginScreenViewM
                 }
             }
         }
+
+        Text(
+            text = stringResource(id = R.string.copyright),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomEnd)
+                .padding(16.dp),
+            style = MaterialTheme.typography.bodySmall,
+            color = White,
+            textAlign = TextAlign.Right
+        )
         SnackbarHost(
             hostState = snackbarHostState,
             modifier = Modifier.align(Alignment.BottomCenter)
