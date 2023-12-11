@@ -1,16 +1,19 @@
 package ir.millennium.sampleprojectcompose.presentation.navigation
 
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import androidx.navigation.navArgument
+import com.google.gson.Gson
+import ir.millennium.sampleprojectcompose.data.model.remote.ArticleItem
 import ir.millennium.sampleprojectcompose.presentation.activity.mainActivity.MainActivityViewModel
-import ir.millennium.sampleprojectcompose.presentation.screens.articleScreen.ArticleScreen
-import ir.millennium.sampleprojectcompose.presentation.screens.homeScreen.HomeScreen
+import ir.millennium.sampleprojectcompose.presentation.screens.articleScreen.ArticleScreenViewModel
+import ir.millennium.sampleprojectcompose.presentation.screens.detailArticleScreen.DetailArticleScreen
 import ir.millennium.sampleprojectcompose.presentation.screens.mainScreen.MainScreen
 
-@OptIn(ExperimentalMaterialNavigationApi::class)
 fun NavGraphBuilder.appGraph(
     navController: NavController,
     mainActivityViewModel: MainActivityViewModel
@@ -18,30 +21,27 @@ fun NavGraphBuilder.appGraph(
     navigation(startDestination = Screens.MainScreenRoute.route, route = Screens.AppRoute.route) {
 
         composable(route = Screens.MainScreenRoute.route) {
-            MainScreen(navController = navController, mainActivityViewModel)
+            val articleScreenViewModel = hiltViewModel<ArticleScreenViewModel>(it)
+            MainScreen(
+                navController = navController,
+                mainActivityViewModel = mainActivityViewModel,
+                articleScreenViewModel = articleScreenViewModel
+            )
         }
 
-        composable(route = Screens.HomeScreenRoute.route) {
-            HomeScreen(navController = navController)
+        composable(route = "${Screens.DetailArticleScreenRoute.route}?articleItem={articleItem}",
+            arguments = listOf(
+                navArgument(name = "articleItem") {
+                    type = NavType.StringType
+                }
+            )
+        ) { backstackEntry ->
+            val articleItemJson = backstackEntry.arguments?.getString("articleItem")
+            val articleItem = Gson().fromJson(articleItemJson, ArticleItem::class.java)
+            DetailArticleScreen(
+                navController = navController,
+                articleItem = articleItem
+            )
         }
-
-        composable(route = Screens.ArticleScreenRoute.route) {
-            ArticleScreen(navController = navController)
-        }
-
-//        composable(route = "${Screens.ScreenDetailRoute.route}?nameLanguage={nameLanguage}",
-//            arguments = listOf(
-//                navArgument(name = "nameLanguage") {
-//                    type = NavType.StringType
-//                    //defaultValue= "user"
-//                    nullable = true
-//                }
-//            )
-//        ) { backstackEntry ->
-//            ScreenDetail(
-//                navController = navController,
-//                nameLanguage = backstackEntry.arguments?.getString("nameLanguage")
-//            )
-//        }
     }
 }

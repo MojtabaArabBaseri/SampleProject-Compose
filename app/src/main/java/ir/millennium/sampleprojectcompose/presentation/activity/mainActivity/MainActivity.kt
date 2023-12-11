@@ -1,4 +1,4 @@
-package ir.millennium.sampleprojectcompose
+package ir.millennium.sampleprojectcompose.presentation.activity.mainActivity
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -19,7 +19,6 @@ import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ir.millennium.sampleprojectcompose.core.ui.BaseActivity
 import ir.millennium.sampleprojectcompose.domain.entity.TypeTheme
-import ir.millennium.sampleprojectcompose.presentation.activity.mainActivity.MainActivityViewModel
 import ir.millennium.sampleprojectcompose.presentation.navigation.NavGraph
 import ir.millennium.sampleprojectcompose.presentation.navigation.Screens
 import ir.millennium.sampleprojectcompose.presentation.theme.AppTheme
@@ -46,32 +45,19 @@ class MainActivity : BaseActivity() {
                 Screens.LoginScreenRoute.route -> mainActivityViewModel.onAuthScreen(true)
                 else -> mainActivityViewModel.onAuthScreen(false)
             }
-            MyApp(
-                statusTheme = theme.value,
+
+            AppTheme(
+                typeTheme = theme.value,
                 authScreens = authScreens.value,
-                mainActivityViewModel.sharedPreferencesManager.getLanguageApp()
+                languageApp = mainActivityViewModel.sharedPreferencesManager.getLanguageApp()
             ) {
-                NavGraph(navController, mainActivityViewModel)
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    NavGraph(navController, mainActivityViewModel)
+                }
             }
-        }
-
-    }
-}
-
-
-@Composable
-fun MyApp(
-    statusTheme: Int,
-    authScreens: Boolean,
-    typeLanguage: String,
-    children: @Composable () -> Unit
-) {
-    AppTheme(typeTheme = statusTheme, authScreens = authScreens, languageApp = typeLanguage) {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            children()
         }
     }
 }

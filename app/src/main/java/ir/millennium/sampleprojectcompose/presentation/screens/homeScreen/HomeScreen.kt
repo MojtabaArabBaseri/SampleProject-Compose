@@ -21,7 +21,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -38,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import androidx.navigation.NavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ir.millennium.sampleprojectcompose.R
 import ir.millennium.sampleprojectcompose.presentation.dialog.AboutMeScreen
@@ -52,10 +51,10 @@ import ir.millennium.sampleprojectcompose.presentation.utils.Constants.USER_PROF
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen() {
 
-    val sheetState = rememberModalBottomSheetState()
-    var showBottomSheet by remember { mutableStateOf(false) }
+    val modalBottomSheetState = rememberModalBottomSheetState()
+    var isExpandedBottomSheet by rememberSaveable { mutableStateOf(false) }
 
     val systemUiController = rememberSystemUiController()
     val localCustomColorsPalette = LocalCustomColorsPalette.current
@@ -118,7 +117,7 @@ fun HomeScreen(navController: NavController) {
 
             item {
                 Button(
-                    onClick = { showBottomSheet = true },
+                    onClick = { isExpandedBottomSheet = true },
                     modifier = Modifier
                         .padding(top = 12.dp, bottom = 20.dp, start = 16.dp, end = 16.dp)
                         .fillMaxWidth()
@@ -136,13 +135,13 @@ fun HomeScreen(navController: NavController) {
             }
         }
 
-        if (showBottomSheet) {
+        if (isExpandedBottomSheet) {
             ModalBottomSheet(
                 onDismissRequest = {
                     systemUiController.setNavigationBarColor(localCustomColorsPalette.navigationBottomColor)
-                    showBottomSheet = false
+                    isExpandedBottomSheet = false
                 },
-                sheetState = sheetState,
+                sheetState = modalBottomSheetState,
                 containerColor = MaterialTheme.colorScheme.background,
                 scrimColor = NavyColor.copy(alpha = 0.2f),
                 tonalElevation = 0.dp,

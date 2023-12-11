@@ -38,7 +38,8 @@ fun questionDialog(
     labelYesButton: String = stringResource(id = R.string.yes),
     labelNoButton: String = stringResource(id = R.string.no),
     statusDialog: MutableState<Boolean>,
-    callbackOnYesButtonQuestionDialog: MutableState<Boolean>
+    onClickYes: () -> Unit = {},
+    onClickNo: () -> Unit = {}
 ) {
     BasicAlertDialog(
         onDismissRequest = {
@@ -97,7 +98,7 @@ fun questionDialog(
 
                 Button(onClick = {
                     statusDialog.value = false
-                    callbackOnYesButtonQuestionDialog.value = true
+                    onClickYes()
                 }, modifier = Modifier
                     .constrainAs(yesButtonRef) {
                         top.linkTo(messageRef.bottom)
@@ -118,7 +119,6 @@ fun questionDialog(
 
                 OutlinedButton(onClick = {
                     statusDialog.value = false
-                    callbackOnYesButtonQuestionDialog.value = false
                 }, modifier = Modifier
                     .constrainAs(noButtonRef) {
                         top.linkTo(messageRef.bottom)

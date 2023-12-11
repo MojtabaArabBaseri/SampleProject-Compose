@@ -10,7 +10,7 @@ data class ResponseNewsModel(
     val totalResults: Int? = null,
 
     @field:SerializedName("articles")
-    val articles: List<NewsItem>? = null,
+    val articles: List<ArticleItem>? = null,
 
     @field:SerializedName("status")
     val status: String? = null
@@ -27,7 +27,7 @@ data class Source(
 ) : Parcelable
 
 @Parcelize
-data class NewsItem(
+data class ArticleItem(
 
     @field:SerializedName("publishedAt")
     val publishedAt: String? = null,

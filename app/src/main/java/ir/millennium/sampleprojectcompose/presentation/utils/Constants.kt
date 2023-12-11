@@ -1,12 +1,13 @@
 package ir.millennium.sampleprojectcompose.presentation.utils
 
+import androidx.compose.ui.unit.dp
 import ir.millennium.sampleprojectcompose.R
 import ir.millennium.sampleprojectcompose.data.model.local.aboutMe.UserProfileEntity
 import ir.millennium.sampleprojectcompose.data.model.local.aboutMe.UserProfileSocialNetworkEntity
 
 
 object Constants {
-
+    val AppBarHeight = 56.dp
     const val SPLASH_DISPLAY_LENGTH = 3500.toLong()
 
     const val USER_NAME = "mojtaba"

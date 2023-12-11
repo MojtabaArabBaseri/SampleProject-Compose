@@ -28,11 +28,11 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -47,21 +47,31 @@ import ir.millennium.sampleprojectcompose.domain.entity.TypeTheme
 import ir.millennium.sampleprojectcompose.presentation.activity.mainActivity.MainActivityViewModel
 import ir.millennium.sampleprojectcompose.presentation.dialog.questionDialog
 import ir.millennium.sampleprojectcompose.presentation.screens.articleScreen.ArticleScreen
+import ir.millennium.sampleprojectcompose.presentation.screens.articleScreen.ArticleScreenViewModel
 import ir.millennium.sampleprojectcompose.presentation.screens.homeScreen.HomeScreen
 import ir.millennium.sampleprojectcompose.presentation.theme.LocalCustomColorsPalette
 import ir.millennium.sampleprojectcompose.presentation.theme.Red
+import ir.millennium.sampleprojectcompose.presentation.theme.White
 import ir.millennium.sampleprojectcompose.presentation.utils.Constants.BACK_PRESSED
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navController: NavController, mainActivityViewModel: MainActivityViewModel) {
+fun MainScreen(
+    navController: NavController,
+    mainActivityViewModel: MainActivityViewModel,
+    articleScreenViewModel: ArticleScreenViewModel
+) {
 
     val context = LocalContext.current
 
-    val statusChangeLanguageDialog = remember { mutableStateOf(false) }
-    val callbackOnYesButtonQuestionDialog = remember { mutableStateOf(false) }
+    val isShowChangeLanguageDialog = rememberSaveable { mutableStateOf(false) }
+
+    val coroutineScope = rememberCoroutineScope()
+
+    val snackbarHostState = remember { SnackbarHostState() }
 
     val items = listOf(
         NavItemState(
@@ -76,13 +86,9 @@ fun MainScreen(navController: NavController, mainActivityViewModel: MainActivity
         )
     )
 
-    var bottomNavState by remember {
+    var bottomNavState by rememberSaveable {
         mutableIntStateOf(0)
     }
-
-    val coroutineScope = rememberCoroutineScope()
-
-    val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
         bottomBar = {
@@ -123,14 +129,17 @@ fun MainScreen(navController: NavController, mainActivityViewModel: MainActivity
     ) { contentPadding ->
         Box(
             Modifier
-                .background(Color.White)
+                .background(White)
                 .padding(contentPadding)
                 .fillMaxSize()
         ) {
             if (bottomNavState == 0) {
-                HomeScreen(navController = navController)
+                HomeScreen()
             } else {
-                ArticleScreen(navController = navController)
+                ArticleScreen(
+                    navController = navController,
+                    articleScreenViewModel = articleScreenViewModel
+                )
             }
 
             CenterAlignedTopAppBar(
@@ -144,7 +153,7 @@ fun MainScreen(navController: NavController, mainActivityViewModel: MainActivity
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { statusChangeLanguageDialog.value = true }) {
+                    IconButton(onClick = { isShowChangeLanguageDialog.value = true }) {
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.ic_language),
                             contentDescription = "Change Language Icon",
@@ -178,16 +187,17 @@ fun MainScreen(navController: NavController, mainActivityViewModel: MainActivity
                 modifier = Modifier.align(Alignment.BottomCenter)
             )
 
-            if (statusChangeLanguageDialog.value) {
+            if (isShowChangeLanguageDialog.value) {
                 questionDialog(
                     message = stringResource(id = R.string.message_change_language),
-                    statusDialog = statusChangeLanguageDialog,
-                    callbackOnYesButtonQuestionDialog = callbackOnYesButtonQuestionDialog
+                    statusDialog = isShowChangeLanguageDialog,
+                    onClickYes = {
+                        coroutineScope.launch {
+                            delay(50)
+                            changeLanguage(mainActivityViewModel, context)
+                        }
+                    }
                 )
-            }
-
-            if (callbackOnYesButtonQuestionDialog.value) {
-                changeLanguage(mainActivityViewModel, context)
             }
         }
     }

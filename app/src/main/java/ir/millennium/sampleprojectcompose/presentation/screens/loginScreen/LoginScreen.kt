@@ -87,13 +87,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginScreen(navController: NavController, loginScreenViewModel: LoginScreenViewModel) {
-    LoginUi(navController, loginScreenViewModel)
+fun LoginScreen(navController: NavController, viewModel: LoginScreenViewModel) {
+    LoginUi(navController, viewModel)
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun LoginUi(navController: NavController, loginScreenViewModel: LoginScreenViewModel) {
+fun LoginUi(navController: NavController, viewModel: LoginScreenViewModel) {
 
     val focusManager = LocalFocusManager.current
 
@@ -101,32 +101,17 @@ fun LoginUi(navController: NavController, loginScreenViewModel: LoginScreenViewM
 
     val focusRequester = remember { FocusRequester() }
 
-    var userNameValue by remember {
-        mutableStateOf("")
-    }
-
-    var passwordValue by remember {
-        mutableStateOf("")
-    }
-
-    var visibilityLabelLogin by remember {
-        mutableStateOf(true)
-    }
-
-    var visibilityProgressBar by remember {
-        mutableStateOf(false)
-    }
-
-    var statusEnabledCardLogin by remember {
-        mutableStateOf(true)
-    }
-
     val keyboardController = LocalSoftwareKeyboardController.current
 
     val coroutineScope = rememberCoroutineScope()
 
     val snackbarHostState = remember { SnackbarHostState() }
 
+    var userNameValue by rememberSaveable { mutableStateOf("") }
+    var passwordValue by rememberSaveable { mutableStateOf("") }
+    var visibilityLabelLogin by rememberSaveable { mutableStateOf(true) }
+    var visibilityProgressBar by rememberSaveable { mutableStateOf(false) }
+    var statusEnabledCardLogin by rememberSaveable { mutableStateOf(true) }
     var isCorrectUserName by rememberSaveable { mutableStateOf(false) }
     var isCorrectPassword by rememberSaveable { mutableStateOf(false) }
 
@@ -143,11 +128,10 @@ fun LoginUi(navController: NavController, loginScreenViewModel: LoginScreenViewM
             .fillMaxSize()
             .navigationBarsPadding()
             .paint(
-                painterResource(id = if (loginScreenViewModel.sharedPreferencesManager.getStatusTheme() == TypeTheme.DARK.typeTheme) R.drawable.background_splash_dark_theme else R.drawable.background_login_light_theme),
+                painterResource(id = if (viewModel.sharedPreferencesManager.getStatusTheme() == TypeTheme.DARK.typeTheme) R.drawable.background_splash_dark_theme else R.drawable.background_login_light_theme),
                 contentScale = ContentScale.FillBounds
             )
-    )
-    {
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -274,18 +258,14 @@ fun LoginUi(navController: NavController, loginScreenViewModel: LoginScreenViewM
 
             OutlinedTextField(
                 value = passwordValue,
-
                 onValueChange = { newText ->
                     passwordValue = newText
                     validatePassword(passwordValue)
                 },
-
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentSize()
                     .background(Transparent)
                     .padding(start = 55.dp, end = 55.dp),
-
                 label = {
                     Text(
                         text = stringResource(id = R.string.please_enter_password),
@@ -376,15 +356,14 @@ fun LoginUi(navController: NavController, loginScreenViewModel: LoginScreenViewM
                                 keyboardController?.hide()
                                 focusManager.clearFocus()
                                 statusEnabledCardLogin = false
-                                loginScreenViewModel.sharedPreferencesManager.setStatusLoginUser(
-                                    true
-                                )
+                                viewModel.sharedPreferencesManager.setStatusLoginUser(true)
                                 visibilityLabelLogin = !visibilityLabelLogin
                                 visibilityProgressBar = !visibilityProgressBar
                                 coroutineScope.launch {
                                     delay(Constants.SPLASH_DISPLAY_LENGTH)
                                     visibilityLabelLogin = !visibilityLabelLogin
-                                    visibilityProgressBar = !visibilityProgressBar
+                                    visibilityProgressBar =
+                                        !visibilityProgressBar
                                     statusEnabledCardLogin = true
                                     delay(500)
                                     navToMainScreen(navController)
@@ -430,6 +409,9 @@ fun LoginUi(navController: NavController, loginScreenViewModel: LoginScreenViewM
                     }
                 }
             }
+
+            Spacer(modifier = Modifier.height(70.dp))
+
         }
 
         Text(
@@ -442,6 +424,7 @@ fun LoginUi(navController: NavController, loginScreenViewModel: LoginScreenViewM
             color = White,
             textAlign = TextAlign.Right
         )
+
         SnackbarHost(
             hostState = snackbarHostState,
             modifier = Modifier.align(Alignment.BottomCenter)

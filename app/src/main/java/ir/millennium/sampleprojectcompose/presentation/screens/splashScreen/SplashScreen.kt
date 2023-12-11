@@ -28,15 +28,14 @@ fun SplashScreen(navController: NavController, splashScreenViewModel: SplashScre
 
     val coroutineScope = rememberCoroutineScope()
 
-    Box(
-        modifier = with(Modifier) {
-            fillMaxSize()
-                .navigationBarsPadding()
-                .paint(
-                    painterResource(id = if (splashScreenViewModel.sharedPreferencesManager.getStatusTheme() == TypeTheme.DARK.typeTheme) R.drawable.background_splash_dark_theme else R.drawable.background_login_light_theme),
-                    contentScale = ContentScale.FillBounds
-                )
-        })
+    Box(modifier = with(Modifier) {
+        fillMaxSize()
+            .navigationBarsPadding()
+            .paint(
+                painterResource(id = if (splashScreenViewModel.sharedPreferencesManager.getStatusTheme() == TypeTheme.DARK.typeTheme) R.drawable.background_splash_dark_theme else R.drawable.background_login_light_theme),
+                contentScale = ContentScale.FillBounds
+            )
+    })
     {
         Column(
             modifier = Modifier
