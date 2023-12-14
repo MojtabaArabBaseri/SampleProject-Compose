@@ -22,8 +22,9 @@
         <activity
             android:name=".presentation.activity.mainActivity.MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.SampleProjectCompose">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.SampleProjectCompose"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

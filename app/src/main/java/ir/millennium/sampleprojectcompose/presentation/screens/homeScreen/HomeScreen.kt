@@ -51,7 +51,7 @@ import ir.millennium.sampleprojectcompose.presentation.utils.Constants.USER_PROF
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(homeScreenViewModel: HomeScreenViewModel) {
 
     val modalBottomSheetState = rememberModalBottomSheetState()
     var isExpandedBottomSheet by rememberSaveable { mutableStateOf(false) }
@@ -61,6 +61,7 @@ fun HomeScreen() {
 
     Scaffold {
         LazyColumn(
+            state = homeScreenViewModel.stateLazyColumn,
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.Transparent),

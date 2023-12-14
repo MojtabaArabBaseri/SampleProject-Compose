@@ -12,6 +12,7 @@ import ir.millennium.sampleprojectcompose.data.model.remote.ArticleItem
 import ir.millennium.sampleprojectcompose.presentation.activity.mainActivity.MainActivityViewModel
 import ir.millennium.sampleprojectcompose.presentation.screens.articleScreen.ArticleScreenViewModel
 import ir.millennium.sampleprojectcompose.presentation.screens.detailArticleScreen.DetailArticleScreen
+import ir.millennium.sampleprojectcompose.presentation.screens.homeScreen.HomeScreenViewModel
 import ir.millennium.sampleprojectcompose.presentation.screens.mainScreen.MainScreen
 
 fun NavGraphBuilder.appGraph(
@@ -22,10 +23,12 @@ fun NavGraphBuilder.appGraph(
 
         composable(route = Screens.MainScreenRoute.route) {
             val articleScreenViewModel = hiltViewModel<ArticleScreenViewModel>(it)
+            val homeScreenViewModel = hiltViewModel<HomeScreenViewModel>(it)
             MainScreen(
                 navController = navController,
                 mainActivityViewModel = mainActivityViewModel,
-                articleScreenViewModel = articleScreenViewModel
+                articleScreenViewModel = articleScreenViewModel,
+                homeScreenViewModel = homeScreenViewModel
             )
         }
 

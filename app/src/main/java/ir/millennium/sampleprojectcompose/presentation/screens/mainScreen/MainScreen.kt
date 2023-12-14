@@ -49,6 +49,7 @@ import ir.millennium.sampleprojectcompose.presentation.dialog.questionDialog
 import ir.millennium.sampleprojectcompose.presentation.screens.articleScreen.ArticleScreen
 import ir.millennium.sampleprojectcompose.presentation.screens.articleScreen.ArticleScreenViewModel
 import ir.millennium.sampleprojectcompose.presentation.screens.homeScreen.HomeScreen
+import ir.millennium.sampleprojectcompose.presentation.screens.homeScreen.HomeScreenViewModel
 import ir.millennium.sampleprojectcompose.presentation.theme.LocalCustomColorsPalette
 import ir.millennium.sampleprojectcompose.presentation.theme.Red
 import ir.millennium.sampleprojectcompose.presentation.theme.White
@@ -62,7 +63,8 @@ import kotlinx.coroutines.launch
 fun MainScreen(
     navController: NavController,
     mainActivityViewModel: MainActivityViewModel,
-    articleScreenViewModel: ArticleScreenViewModel
+    articleScreenViewModel: ArticleScreenViewModel,
+    homeScreenViewModel: HomeScreenViewModel
 ) {
 
     val context = LocalContext.current
@@ -134,7 +136,7 @@ fun MainScreen(
                 .fillMaxSize()
         ) {
             if (bottomNavState == 0) {
-                HomeScreen()
+                HomeScreen(homeScreenViewModel)
             } else {
                 ArticleScreen(
                     navController = navController,

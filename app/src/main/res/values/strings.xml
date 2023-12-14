@@ -39,7 +39,7 @@
     <string name="aboutMe">About Me</string>
     <string name="about_me_detail">Hi.\nI am Mojtaba Arab Baseri.\nI Experienced Android developer
         with more than six years of expertise in building diverse applications. Proficient in Java, Kotlin,
-        Coroutines, Flow, Android SDK, MVVM Architecture, Hilt, Rest API, Room, XML, Git,
+        Coroutines, Flow, Android SDK, MVVM Architecture, Hilt, Rest API, Jetpack Compose, Room, XML, Git,
         and third-party libraries for stable UIs. Skilled in Agile project management.</string>
 
 </resources>

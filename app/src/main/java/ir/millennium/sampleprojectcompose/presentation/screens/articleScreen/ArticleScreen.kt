@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
@@ -46,8 +45,6 @@ fun ArticleScreen(
 
     val swipeRefreshState = rememberSwipeRefreshState(false)
 
-    val stateLazyColumn = rememberLazyListState()
-
     val coroutineScope = rememberCoroutineScope()
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -73,7 +70,7 @@ fun ArticleScreen(
         ) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                state = stateLazyColumn,
+                state = articleScreenViewModel.stateLazyColumn,
                 contentPadding = PaddingValues(top = 65.dp)
             ) {
                 items(items = articleScreenViewModel.articleList) { articleItem ->
@@ -105,7 +102,7 @@ fun ArticleScreen(
         )
     }
 
-    stateLazyColumn.OnBottomReached {
+    articleScreenViewModel.stateLazyColumn.OnBottomReached {
         if (!isShowLoadingData.value) {
             articleScreenViewModel.isShowLoadingData(true)
             articleScreenViewModel.getNextPage()

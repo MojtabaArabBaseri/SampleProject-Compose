@@ -1,5 +1,6 @@
 package ir.millennium.sampleprojectcompose.presentation.screens.articleScreen
 
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -23,6 +24,8 @@ import javax.inject.Inject
 open class ArticleScreenViewModel @Inject constructor(
     private val getNewsUseCase: GetNewsUseCase
 ) : ViewModel() {
+
+    val stateLazyColumn = LazyListState()
 
     private val _isShowLoadingData = MutableLiveData(false)
     val isShowLoadingData: LiveData<Boolean> = _isShowLoadingData

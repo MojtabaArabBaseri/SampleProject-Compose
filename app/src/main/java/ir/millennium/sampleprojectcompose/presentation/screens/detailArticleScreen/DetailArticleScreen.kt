@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -56,17 +56,20 @@ fun DetailArticleScreen(navController: NavController, articleItem: ArticleItem) 
     ) {
 
         TopAppBar(
-            windowInsets = WindowInsets(top = 0, bottom = 0),
-
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            windowInsets = WindowInsets(
+                top = 0, bottom = 0
+            ),
             title = {
                 Text(
-                    text = stringResource(id = R.string.title_application),
+                    text = stringResource(id = R.string.detail_news),
                     color = LocalCustomColorsPalette.current.textColorPrimary,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.titleMedium
                 )
             },
-
             navigationIcon = {
                 IconButton(onClick = { navController.navigateUp() }) {
                     Icon(
@@ -82,7 +85,13 @@ fun DetailArticleScreen(navController: NavController, articleItem: ArticleItem) 
         )
 
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-            ConstraintLayout(modifier = Modifier.wrapContentSize()) {
+
+            ConstraintLayout(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+            ) {
+
                 val (imageRef, titleRef, authorRef, dateRef, descriptionRef) = createRefs()
 
                 AsyncImage(
@@ -97,10 +106,9 @@ fun DetailArticleScreen(navController: NavController, articleItem: ArticleItem) 
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
                             width = Dimension.matchParent
-                            height = Dimension.value(150.dp)
                         }
                         .fillMaxWidth()
-                        .aspectRatio(21f / 9f)
+                        .aspectRatio(16f / 9f)
                         .padding(16.dp)
                         .clip(RoundedCornerShape(dimensionResource(id = R.dimen.size_radius_editText)))
                         .border(

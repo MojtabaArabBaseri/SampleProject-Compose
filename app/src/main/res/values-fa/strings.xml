@@ -39,6 +39,6 @@
     <string name="attention">اخطار</string>
     <string name="change_language">تغییر زبان</string>
     <string name="message_change_language">آیا می خواهید زبان را به انگلیسی تغییر دهید؟</string>
-    <string name="about_me_detail">سلام\nمن مجتبی عرب باصری هستم.\nبرنامه نویس اندروید با بیش از 6 سال تخصص در ساخت اپلیکیشن های متنوع. مسلط به Java, Kotlin, Coroutines, Flow, Android SDK, MVVM Architecture, Hilt, Rest API, Room, XML, Git و کتابخانه های اندروید برای ساخت رابط های کاربری پایدار.</string>
+    <string name="about_me_detail">سلام\nمن مجتبی عرب باصری هستم.\nبرنامه نویس اندروید با بیش از 6 سال تخصص در ساخت اپلیکیشن های متنوع. مسلط به Java, Kotlin, Coroutines, Flow, Android SDK, MVVM Architecture, Hilt, Rest API, Room, Jetpack Compose, XML, Git و کتابخانه های اندروید برای ساخت رابط های کاربری پایدار.</string>
 
 </resources>
