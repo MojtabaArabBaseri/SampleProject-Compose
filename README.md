@@ -1,9 +1,10 @@
 # Sample Android Project
 
 Everything you need to start a modern, scalable and robust android project.
-you got everything you need to get started , no more fundamental setup , boring primary configuration and boilerplates.
+you got everything you need to get started , no more fundamental setup , boring primary
+configuration and boilerplate's.
 
-![introduce_app](https://github.com/MojtabaArabBaseri/SampleProject/assets/56076138/d2cb4c84-203a-49ea-9d84-43450560c8a2)
+![introduce_app](app/src/main/assets/introduce_app.mp4)
 
 This Android project template is built using the following technologies:
 
