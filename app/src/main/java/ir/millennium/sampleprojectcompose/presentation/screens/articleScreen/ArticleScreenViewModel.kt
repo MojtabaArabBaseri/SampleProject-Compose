@@ -2,14 +2,12 @@ package ir.millennium.sampleprojectcompose.presentation.screens.articleScreen
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ir.millennium.sampleprojectcompose.data.dataSource.remote.UiState
 import ir.millennium.sampleprojectcompose.data.model.remote.ArticleItem
-import ir.millennium.sampleprojectcompose.domain.useCase.GetNewsUseCase
+import ir.millennium.sampleprojectcompose.domain.useCase.GetArticlesUseCase
 import ir.millennium.sampleprojectcompose.presentation.utils.Constants.API_KEY
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,17 +20,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 open class ArticleScreenViewModel @Inject constructor(
-    private val getNewsUseCase: GetNewsUseCase
+    private val getArticlesUseCase: GetArticlesUseCase
 ) : ViewModel() {
 
     val stateLazyColumn = LazyListState()
 
-    private val _isShowLoadingData = MutableLiveData(false)
-    val isShowLoadingData: LiveData<Boolean> = _isShowLoadingData
-
-    var articleList = mutableStateListOf<ArticleItem>()
+    val isShowLoadingData = MutableStateFlow(false)
 
     val uiState = MutableStateFlow<UiState>(UiState.Initialization)
+
+    var articleList = mutableStateListOf<ArticleItem>()
 
     private var currentPage = 1
 
@@ -49,7 +46,7 @@ open class ArticleScreenViewModel @Inject constructor(
 
         params.replace("page", currentPage)
 
-        getNewsUseCase.getNews(params)
+        getArticlesUseCase.getArticles(params)
             .flowOn(Dispatchers.IO)
             .map { newsList ->
                 newsList.articles?.let { articleList.addAll(it) }
@@ -75,6 +72,6 @@ open class ArticleScreenViewModel @Inject constructor(
     }
 
     fun isShowLoadingData(isShow: Boolean) {
-        _isShowLoadingData.value = isShow
+        isShowLoadingData.value = isShow
     }
 }

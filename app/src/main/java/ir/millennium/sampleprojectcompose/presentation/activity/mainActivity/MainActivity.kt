@@ -8,7 +8,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -30,15 +29,11 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
             val navController = rememberNavController()
-
-            val theme =
-                mainActivityViewModel.typeTheme.observeAsState(mainActivityViewModel.sharedPreferencesManager.getStatusTheme())
-            val authScreens =
-                mainActivityViewModel.authScreen.observeAsState(false)
-
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             when (navBackStackEntry?.destination?.route) {
                 Screens.SplashScreenRoute.route -> mainActivityViewModel.onAuthScreen(true)
@@ -47,8 +42,8 @@ class MainActivity : BaseActivity() {
             }
 
             AppTheme(
-                typeTheme = theme.value,
-                authScreens = authScreens.value,
+                typeTheme = mainActivityViewModel.typeTheme.value,
+                authScreens = mainActivityViewModel.authScreen.value,
                 languageApp = mainActivityViewModel.sharedPreferencesManager.getLanguageApp()
             ) {
                 Surface(

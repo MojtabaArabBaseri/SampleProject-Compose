@@ -17,8 +17,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -32,6 +30,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import ir.millennium.sampleprojectcompose.data.dataSource.remote.UiState
 import ir.millennium.sampleprojectcompose.presentation.utils.OnBottomReached
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -40,8 +39,6 @@ fun ArticleScreen(
     navController: NavController,
     articleScreenViewModel: ArticleScreenViewModel
 ) {
-
-    val isShowLoadingData = articleScreenViewModel.isShowLoadingData.observeAsState(false)
 
     val swipeRefreshState = rememberSwipeRefreshState(false)
 
@@ -77,7 +74,7 @@ fun ArticleScreen(
                     rowArticle(navController, articleItem)
                 }
 
-                if (isShowLoadingData.value && articleScreenViewModel.articleList.size > 0) {
+                if (articleScreenViewModel.isShowLoadingData.value && articleScreenViewModel.articleList.size > 0) {
                     item {
                         Box(
                             modifier = Modifier
@@ -103,7 +100,7 @@ fun ArticleScreen(
     }
 
     articleScreenViewModel.stateLazyColumn.OnBottomReached {
-        if (!isShowLoadingData.value) {
+        if (!articleScreenViewModel.isShowLoadingData.value) {
             articleScreenViewModel.isShowLoadingData(true)
             articleScreenViewModel.getNextPage()
         }
@@ -113,7 +110,7 @@ fun ArticleScreen(
         articleScreenViewModel,
         coroutineScope,
         snackbarHostState,
-        isShowLoadingData,
+        articleScreenViewModel.isShowLoadingData,
         swipeRefreshState
     )
 
@@ -135,7 +132,7 @@ fun renderUi(
     articleScreenViewModel: ArticleScreenViewModel,
     coroutineScope: CoroutineScope,
     snackbarHostState: SnackbarHostState,
-    isShowLoadingData: State<Boolean>,
+    isShowLoadingData: MutableStateFlow<Boolean>,
     swipeRefreshState: SwipeRefreshState
 ) {
     LaunchedEffect(coroutineScope) {

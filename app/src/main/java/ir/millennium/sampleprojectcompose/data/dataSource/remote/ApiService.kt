@@ -1,12 +1,12 @@
 package ir.millennium.sampleprojectcompose.data.dataSource.remote
 
-import ir.millennium.sampleprojectcompose.data.model.remote.ResponseNewsModel
+import ir.millennium.sampleprojectcompose.data.model.remote.ResponseArticlesModel
 import retrofit2.http.GET
 import retrofit2.http.QueryMap
 
 interface ApiService {
 
     @GET("everything")
-    suspend fun getNews(@QueryMap parameters: MutableMap<String, Any>): ResponseNewsModel
+    suspend fun getArticles(@QueryMap parameters: MutableMap<String, Any>): ResponseArticlesModel
 
 }
