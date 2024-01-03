@@ -11,6 +11,7 @@ import ir.millennium.sampleprojectcompose.domain.useCase.GetArticlesUseCase
 import ir.millennium.sampleprojectcompose.presentation.utils.Constants.API_KEY
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -25,9 +26,11 @@ open class ArticleScreenViewModel @Inject constructor(
 
     val stateLazyColumn = LazyListState()
 
-    val isShowLoadingData = MutableStateFlow(false)
+    private val _isShowLoadingData = MutableStateFlow(false)
+    val isShowLoadingData: StateFlow<Boolean> = _isShowLoadingData
 
-    val uiState = MutableStateFlow<UiState>(UiState.Initialization)
+    private val _uiState = MutableStateFlow<UiState>(UiState.Initialization)
+    val uiState: StateFlow<UiState> = _uiState
 
     var articleList = mutableStateListOf<ArticleItem>()
 
@@ -48,16 +51,18 @@ open class ArticleScreenViewModel @Inject constructor(
 
         getArticlesUseCase.getArticles(params)
             .flowOn(Dispatchers.IO)
-            .map { newsList ->
-                newsList.articles?.let { articleList.addAll(it) }
-                uiState.value = UiState.Success(articleList)
+            .map { articleList ->
+                articleList.articles?.let { this.articleList.addAll(it) }
+                _uiState.value = UiState.Success(this.articleList)
             }
             .onStart {
-                uiState.value = UiState.Loading
+                _uiState.value = UiState.Loading
             }
             .catch { throwable ->
-                uiState.value = UiState.Error(throwable)
+                _uiState.value = UiState.Error(throwable)
             }.launchIn(viewModelScope)
+
+
     }
 
     fun refresh() {
@@ -72,6 +77,6 @@ open class ArticleScreenViewModel @Inject constructor(
     }
 
     fun isShowLoadingData(isShow: Boolean) {
-        isShowLoadingData.value = isShow
+        _isShowLoadingData.value = isShow
     }
 }

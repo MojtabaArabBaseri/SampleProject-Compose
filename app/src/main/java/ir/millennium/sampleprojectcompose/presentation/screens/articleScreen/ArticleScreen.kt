@@ -30,7 +30,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import ir.millennium.sampleprojectcompose.data.dataSource.remote.UiState
 import ir.millennium.sampleprojectcompose.presentation.utils.OnBottomReached
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -73,8 +73,7 @@ fun ArticleScreen(
                 items(items = articleScreenViewModel.articleList) { articleItem ->
                     rowArticle(navController, articleItem)
                 }
-
-                if (articleScreenViewModel.isShowLoadingData.value && articleScreenViewModel.articleList.size > 0) {
+                if (articleScreenViewModel.isShowLoadingData.value && articleScreenViewModel.articleList.isNotEmpty()) {
                     item {
                         Box(
                             modifier = Modifier
@@ -121,10 +120,12 @@ fun ArticleScreen(
 @Composable
 fun getData(articleScreenViewModel: ArticleScreenViewModel, coroutineScope: CoroutineScope) {
     LaunchedEffect(coroutineScope) {
-        if (articleScreenViewModel.articleList.size == 0) {
+        if (articleScreenViewModel.articleList.isEmpty()) {
             articleScreenViewModel.getNews(articleScreenViewModel.params)
         }
     }
+
+
 }
 
 @Composable
@@ -132,7 +133,7 @@ fun renderUi(
     articleScreenViewModel: ArticleScreenViewModel,
     coroutineScope: CoroutineScope,
     snackbarHostState: SnackbarHostState,
-    isShowLoadingData: MutableStateFlow<Boolean>,
+    isShowLoadingData: StateFlow<Boolean>,
     swipeRefreshState: SwipeRefreshState
 ) {
     LaunchedEffect(coroutineScope) {
