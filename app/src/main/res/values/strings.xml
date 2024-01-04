@@ -14,8 +14,8 @@
     <string name="please_enter_user_name">Please Enter User Name</string>
     <string name="please_enter_password">Please Enter Password</string>
     <string name="profile">Profile</string>
-    <string name="detail_news">Detail News</string>
-    <string name="news">News</string>
+    <string name="detail_article">Detail Article</string>
+    <string name="articles">Articles</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="attention">Attention</string>

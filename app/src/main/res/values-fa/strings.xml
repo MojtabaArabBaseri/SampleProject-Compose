@@ -32,8 +32,8 @@
     <string name="aboutMe">در مورد من</string>
 
     <string name="profile">حساب کاربری</string>
-    <string name="detail_news">جزئیات خبر</string>
-    <string name="news">اخبار</string>
+    <string name="detail_article">جزئیات مقاله</string>
+    <string name="articles">مقالات</string>
     <string name="yes">بله</string>
     <string name="no">خیر</string>
     <string name="attention">اخطار</string>

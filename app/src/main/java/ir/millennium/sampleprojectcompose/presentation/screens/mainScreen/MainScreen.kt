@@ -82,9 +82,9 @@ fun MainScreen(
             (ImageVector.vectorResource(id = R.drawable.ic_user_profile))
         ),
         NavItemState(
-            stringResource(id = R.string.news),
-            (ImageVector.vectorResource(id = R.drawable.ic_news)),
-            (ImageVector.vectorResource(id = R.drawable.ic_news))
+            stringResource(id = R.string.articles),
+            (ImageVector.vectorResource(id = R.drawable.ic_articles)),
+            (ImageVector.vectorResource(id = R.drawable.ic_articles))
         )
     )
 

@@ -64,7 +64,7 @@ fun DetailArticleScreen(navController: NavController, articleItem: ArticleItem) 
             ),
             title = {
                 Text(
-                    text = stringResource(id = R.string.detail_news),
+                    text = stringResource(id = R.string.detail_article),
                     color = LocalCustomColorsPalette.current.textColorPrimary,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.titleMedium
@@ -165,7 +165,7 @@ fun DetailArticleScreen(navController: NavController, articleItem: ArticleItem) 
                     )
                 }
 
-                articleItem.description?.let {
+                articleItem.content?.let {
                     Text(
                         text = it,
                         modifier = Modifier
