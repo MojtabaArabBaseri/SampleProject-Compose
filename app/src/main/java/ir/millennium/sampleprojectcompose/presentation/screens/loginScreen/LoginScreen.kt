@@ -70,7 +70,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import ir.millennium.sampleprojectcompose.R
-import ir.millennium.sampleprojectcompose.data.dataSource.local.sharedPreferences.SharedPreferencesManager
+import ir.millennium.sampleprojectcompose.data.dataSource.local.preferencesDataStoreManager.UserPreferencesRepository
 import ir.millennium.sampleprojectcompose.domain.entity.TypeTheme
 import ir.millennium.sampleprojectcompose.presentation.navigation.Screens
 import ir.millennium.sampleprojectcompose.presentation.theme.GrayDark
@@ -83,6 +83,7 @@ import ir.millennium.sampleprojectcompose.presentation.utils.Constants
 import ir.millennium.sampleprojectcompose.presentation.utils.Constants.PASSWORD
 import ir.millennium.sampleprojectcompose.presentation.utils.Constants.USER_NAME
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -128,7 +129,7 @@ fun LoginUi(navController: NavController, viewModel: LoginScreenViewModel) {
             .fillMaxSize()
             .navigationBarsPadding()
             .paint(
-                painterResource(id = if (viewModel.sharedPreferencesManager.getStatusTheme() == TypeTheme.DARK.typeTheme) R.drawable.background_splash_dark_theme else R.drawable.background_login_light_theme),
+                painterResource(id = if (viewModel.typeTheme.value == TypeTheme.DARK.typeTheme) R.drawable.background_splash_dark_theme else R.drawable.background_login_light_theme),
                 contentScale = ContentScale.FillBounds
             )
     ) {
@@ -356,7 +357,9 @@ fun LoginUi(navController: NavController, viewModel: LoginScreenViewModel) {
                                 keyboardController?.hide()
                                 focusManager.clearFocus()
                                 statusEnabledCardLogin = false
-                                viewModel.sharedPreferencesManager.setStatusLoginUser(true)
+                                coroutineScope.launch(Dispatchers.IO) {
+                                    viewModel.userPreferencesRepository.setStatusLoginUser(true)
+                                }
                                 visibilityLabelLogin = !visibilityLabelLogin
                                 visibilityProgressBar = !visibilityProgressBar
                                 coroutineScope.launch {
@@ -475,6 +478,6 @@ fun navToMainScreen(navController: NavController) {
 @Composable
 fun Preview() {
     val loginScreenViewModel =
-        LoginScreenViewModel(SharedPreferencesManager(LocalContext.current))
+        LoginScreenViewModel(UserPreferencesRepository(LocalContext.current))
     LoginUi(NavController(LocalContext.current), loginScreenViewModel)
 }

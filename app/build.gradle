@@ -202,4 +202,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     androidTestImplementation "org.mockito:mockito-core:3.10.0"
     androidTestImplementation 'app.cash.turbine:turbine:1.0.0'
+
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
 }

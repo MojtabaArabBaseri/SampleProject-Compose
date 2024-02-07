@@ -2,21 +2,19 @@ package ir.millennium.sampleprojectcompose.presentation.screens.loginScreen
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import ir.millennium.sampleprojectcompose.data.dataSource.local.sharedPreferences.SharedPreferencesManager
+import ir.millennium.sampleprojectcompose.data.dataSource.local.preferencesDataStoreManager.UserPreferencesRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
 open class LoginScreenViewModel @Inject constructor(
-    val sharedPreferencesManager: SharedPreferencesManager
+    val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
 
-//    var userNameValue by mutableStateOf("")
-//    var passwordValue by mutableStateOf("")
-//    var visibilityLabelLogin by mutableStateOf(true)
-//    var visibilityProgressBar by mutableStateOf(false)
-//    var statusEnabledCardLogin by mutableStateOf(true)
-//    var isCorrectUserName by mutableStateOf(false)
-//    var isCorrectPassword by mutableStateOf(false)
-
-
+    private val statusThemeFlow = userPreferencesRepository.statusTheme
+    private var _typeTheme = runBlocking { MutableStateFlow(statusThemeFlow.first()) }
+    val typeTheme: StateFlow<Int> = _typeTheme
 }

@@ -24,7 +24,7 @@ import ir.millennium.sampleprojectcompose.presentation.utils.Constants
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(navController: NavController, splashScreenViewModel: SplashScreenViewModel) {
+fun SplashScreen(navController: NavController, viewModel: SplashScreenViewModel) {
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -32,7 +32,7 @@ fun SplashScreen(navController: NavController, splashScreenViewModel: SplashScre
         fillMaxSize()
             .navigationBarsPadding()
             .paint(
-                painterResource(id = if (splashScreenViewModel.sharedPreferencesManager.getStatusTheme() == TypeTheme.DARK.typeTheme) R.drawable.background_splash_dark_theme else R.drawable.background_login_light_theme),
+                painterResource(id = if (viewModel.typeTheme.value == TypeTheme.DARK.typeTheme) R.drawable.background_splash_dark_theme else R.drawable.background_login_light_theme),
                 contentScale = ContentScale.FillBounds
             )
     })
@@ -56,13 +56,15 @@ fun SplashScreen(navController: NavController, splashScreenViewModel: SplashScre
 
     LaunchedEffect(coroutineScope) {
         delay(Constants.SPLASH_DISPLAY_LENGTH)
-        if (splashScreenViewModel.sharedPreferencesManager.getStatusLoginUser()) {
-            navController.navigate(Screens.MainScreenRoute.route) {
-                popUpTo(Screens.SplashScreenRoute.route) { inclusive = true }
-            }
-        } else {
-            navController.navigate(Screens.LoginScreenRoute.route) {
-                popUpTo(Screens.SplashScreenRoute.route) { inclusive = true }
+        viewModel.userPreferencesRepository.isUserLogin.collect { statusLoginUser ->
+            if (statusLoginUser) {
+                navController.navigate(Screens.MainScreenRoute.route) {
+                    popUpTo(Screens.SplashScreenRoute.route) { inclusive = true }
+                }
+            } else {
+                navController.navigate(Screens.LoginScreenRoute.route) {
+                    popUpTo(Screens.SplashScreenRoute.route) { inclusive = true }
+                }
             }
         }
     }

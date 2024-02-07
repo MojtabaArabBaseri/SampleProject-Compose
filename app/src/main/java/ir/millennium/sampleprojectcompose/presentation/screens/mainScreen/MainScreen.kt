@@ -165,10 +165,14 @@ fun MainScreen(
                 },
                 actions = {
                     IconButton(onClick = {
-                        if (mainActivityViewModel.sharedPreferencesManager.getStatusTheme() == TypeTheme.DARK.typeTheme) {
-                            mainActivityViewModel.onThemeChanged(TypeTheme.LIGHT.typeTheme)
-                        } else {
-                            mainActivityViewModel.onThemeChanged(TypeTheme.DARK.typeTheme)
+                        coroutineScope.launch {
+                            mainActivityViewModel.statusThemeFlow.collect { statusTheme ->
+                                if (statusTheme == TypeTheme.DARK.typeTheme) {
+                                    mainActivityViewModel.onThemeChanged(TypeTheme.LIGHT.typeTheme)
+                                } else {
+                                    mainActivityViewModel.onThemeChanged(TypeTheme.DARK.typeTheme)
+                                }
+                            }
                         }
                         (context as? Activity)?.recreate()
                     }) {
@@ -220,15 +224,13 @@ fun whenUserWantToExitApp(
     BACK_PRESSED = System.currentTimeMillis()
 }
 
-fun changeLanguage(mainActivityViewModel: MainActivityViewModel, context: Context) {
-    if (mainActivityViewModel.sharedPreferencesManager.getLanguageApp() == TypeLanguage.ENGLISH.typeLanguage) {
-        mainActivityViewModel.sharedPreferencesManager.setLanguageApp(
-            TypeLanguage.PERSIAN.typeLanguage
-        )
-    } else {
-        mainActivityViewModel.sharedPreferencesManager.setLanguageApp(
-            TypeLanguage.ENGLISH.typeLanguage
-        )
+suspend fun changeLanguage(mainActivityViewModel: MainActivityViewModel, context: Context) {
+    mainActivityViewModel.userPreferencesRepository.languageApp.collect { language ->
+        if (language == TypeLanguage.ENGLISH.typeLanguage) {
+            mainActivityViewModel.userPreferencesRepository.setLanguageApp(TypeLanguage.PERSIAN.typeLanguage)
+        } else {
+            mainActivityViewModel.userPreferencesRepository.setLanguageApp(TypeLanguage.ENGLISH.typeLanguage)
+        }
+        (context as? Activity)?.recreate()
     }
-    (context as? Activity)?.recreate()
 }

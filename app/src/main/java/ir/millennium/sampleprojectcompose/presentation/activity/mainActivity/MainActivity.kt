@@ -44,7 +44,7 @@ class MainActivity : BaseActivity() {
             AppTheme(
                 typeTheme = mainActivityViewModel.typeTheme.value,
                 authScreens = mainActivityViewModel.authScreen.value,
-                languageApp = mainActivityViewModel.sharedPreferencesManager.getLanguageApp()
+                languageApp = mainActivityViewModel.languageApp.value
             ) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),

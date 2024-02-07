@@ -1,4 +1,4 @@
-package ir.millennium.sampleprojectcompose.di
+package ir.millennium.sampleprojectcompose.di.module
 
 import android.content.Context
 import androidx.room.Room

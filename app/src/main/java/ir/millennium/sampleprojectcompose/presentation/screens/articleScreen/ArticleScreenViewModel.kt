@@ -62,7 +62,6 @@ open class ArticleScreenViewModel @Inject constructor(
                 _uiState.value = UiState.Error(throwable)
             }.launchIn(viewModelScope)
 
-
     }
 
     fun refresh() {

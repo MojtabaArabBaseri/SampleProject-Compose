@@ -1,13 +1,12 @@
 package ir.millennium.sampleprojectcompose.presentation.utils
 
-import androidx.compose.ui.unit.dp
 import ir.millennium.sampleprojectcompose.R
 import ir.millennium.sampleprojectcompose.data.model.local.aboutMe.UserProfileEntity
 import ir.millennium.sampleprojectcompose.data.model.local.aboutMe.UserProfileSocialNetworkEntity
 
 
 object Constants {
-    val AppBarHeight = 56.dp
+
     const val SPLASH_DISPLAY_LENGTH = 3500.toLong()
 
     const val USER_NAME = "mojtaba"
@@ -17,6 +16,8 @@ object Constants {
     var BACK_PRESSED: Long = 0
 
     const val MOVIE_DATABASE_NAME = "SampleProjectDB.db"
+
+    const val USER_PREFERENCES_REPOSITORY = "user_preferences_repository"
 
     const val BASIC_URL = "https://newsapi.org/v2/"
 
