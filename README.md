@@ -17,6 +17,7 @@ This Android project template is built using the following technologies:
 - Gson for JSON parsing
 - Navigation Component
 - Safe Args
+- Data Store
 - Coil
 - Dark Theme
 - Multi Language
